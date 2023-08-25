@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "podslicer"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.7.0"
+isort = "^5.12.0"
+mypy = "^1.5.1"
+pytest = "^7.4.0"
+pytest-watch = "^4.2.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
