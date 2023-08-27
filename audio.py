@@ -1,10 +1,7 @@
-import logging
 from pathlib import Path
 from subprocess import CalledProcessError, Popen, run
 from threading import Thread
 from time import sleep
-
-logger = logging.getLogger(__name__)
 
 
 class InvalidAudioFile(RuntimeError):
