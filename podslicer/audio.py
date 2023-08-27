@@ -1,5 +1,5 @@
 from pathlib import Path
-from subprocess import CalledProcessError, Popen, run
+from subprocess import DEVNULL, CalledProcessError, Popen, run
 from threading import Thread
 from time import sleep
 
@@ -13,7 +13,7 @@ class InvalidAudioFile(RuntimeError):
 
 class AudioFile:
     """
-    Represents a filepath to a validated audio file.
+    A validated filepath to an audio file.
     """
 
     def __init__(self, filepath: Path) -> None:
@@ -24,10 +24,11 @@ class AudioFile:
         """
         Check that the filepath is recognised as
         an audio file. Any non-zero return code
-        will raise a `CalledProcessError`.
+        raises a `CalledProcessError` which means
+        the file is probably not audio.
         """
         try:
-            run(["afinfo", filepath], check=True)
+            run(["afinfo", filepath], check=True, stdout=DEVNULL)
         except CalledProcessError:
             raise InvalidAudioFile(
                 f"File {filepath} does not appear to be an audio file."
