@@ -48,13 +48,3 @@ def test_nested_tags_should_raise_an_exception() -> None:
         Row.parse(row)
 
     e.match("Nested tags are not allowed.")
-
-
-@pytest.mark.skip()
-def test_unclosed_tag_should_raise_exception() -> None:
-    row = "<open>not closed"
-
-    with pytest.raises(ValueError) as e:
-        Row.parse(row)
-
-    e.match("Unclosed tags are not allowed.")
