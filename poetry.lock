@@ -263,6 +263,16 @@ files = [
 ]
 
 [[package]]
+name = "urwid"
+version = "2.1.2"
+description = "A full-featured console (xterm et al.) user interface library"
+optional = false
+python-versions = "*"
+files = [
+    {file = "urwid-2.1.2.tar.gz", hash = "sha256:588bee9c1cb208d0906a9f73c613d2bd32c3ed3702012f51efe318a3f2127eae"},
+]
+
+[[package]]
 name = "watchdog"
 version = "3.0.0"
 description = "Filesystem events monitoring"
@@ -304,4 +314,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "e075d470ca807dc156e86246b1f8a7e379ca5c219c69ff60a8954bec46254059"
+content-hash = "046a4018cd79be91b253e6fff2d631f24013c60bd2f77fef522e03ae7755b51a"
