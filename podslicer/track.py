@@ -19,49 +19,40 @@ class Metadata:
 
         return cls(**json.loads(text))
 
+    def audio(self) -> Path:
+        return Path(str(self.current)).with_suffix(self.extension)
+
+    def increment(self) -> None:
+        if self.current < self.total:
+            self.current += 1
+        else:
+            raise IndexError("Reached the last segment.")
+
     def json(self) -> str:
         return json.dumps(vars(self))
 
     def progress(self) -> float:
-        percentage = self.current / self.total * 100
+        return round(self.current / self.total * 100, ndigits=1)
 
-        return round(percentage, 1)
-
-
-class Segment:
-    def __init__(self, audio: Path, transcript: Path) -> None:
-        audio.stat()
-        transcript.stat()
-
-        self.audio = audio
-        self.transcript = transcript.read_text()
+    def transcript(self) -> Path:
+        return Path(str(self.current)).with_suffix(".txt")
 
 
 class Track:
     def __init__(self, path: Path) -> None:
         self.metadata = Metadata.from_path(path)
         self.path = path
-        self._load_segment()
+        self.load_segment()
 
-    def _audio_file(self) -> Path:
-        current = str(self.metadata.current)
-        extension = self.metadata.extension
-
-        return self.path / Path(current).with_suffix(extension)
-
-    def _transcript_file(self) -> Path:
-        current = str(self.metadata.current)
-        extension = ".txt"
-
-        return self.path / Path(current).with_suffix(extension)
-
-    def _load_segment(self) -> None:
-        self.segment = Segment(self._audio_file(), self._transcript_file())
+    def load_segment(self) -> None:
+        self._audio = self.path / self.metadata.audio()
+        self._transcript = self.path / self.metadata.transcript()
+        self._audio.stat()
+        self._transcript.stat()
 
     def next_segment(self) -> None:
-        # this could go into metadata. internal state integrity/
-        if (self.metadata.current + 1) > self.metadata.total:
-            raise IndexError()
-        self.metadata.current += 1
+        self.metadata.increment()
+        self.load_segment()
 
-        self._load_segment()
+    def transcript(self) -> str:
+        return self._transcript.read_text()

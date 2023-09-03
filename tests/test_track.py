@@ -117,12 +117,20 @@ def test_track_should_load_and_iterate_through_segments(track_path: Path) -> Non
     track.next_segment()
 
     assert track.metadata.current == 1
-    assert track.segment.audio.name == "1.m4a"
-    assert track.segment.transcript == "1"
 
-    with pytest.raises(IndexError):
+    with pytest.raises(IndexError) as e:
         track.next_segment()
 
+    e.match("Reached the last segment.")
+
     assert track.metadata.current == 1
-    assert track.segment.audio.name == "1.m4a"
-    assert track.segment.transcript == "1"
+
+
+def test_track_transcript_should_be_available(track_path: Path) -> None:
+    track = Track(path=track_path)
+
+    assert track.transcript() == "0"
+
+    track.next_segment()
+
+    assert track.transcript() == "1"
