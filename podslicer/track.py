@@ -21,7 +21,7 @@ class Metadata:
         return cls(**json.loads(text) | dict(path=path))
 
     def audio(self) -> Path:
-        return Path(str(self.current)).with_suffix(self.extension)
+        return (self.path / str(self.current)).with_suffix(self.extension)
 
     def increment(self) -> None:
         if self.current < self.total:
@@ -36,24 +36,22 @@ class Metadata:
         return round(self.current / self.total * 100, ndigits=1)
 
     def transcript(self) -> Path:
-        return Path(str(self.current)).with_suffix(".txt")
+        return (self.path / str(self.current)).with_suffix(".txt")
 
 
 class Track:
     def __init__(self, path: Path) -> None:
         self.metadata = Metadata.from_path(path)
-        self.path = path
         self.load_segment()
 
     def load_segment(self) -> None:
-        self._audio = self.path / self.metadata.audio()
-        self._transcript = self.path / self.metadata.transcript()
+        self._audio = self.metadata.audio()
+        self._transcript = self.metadata.transcript().read_text()
         self._audio.stat()
-        self._transcript.stat()
 
     def next_segment(self) -> None:
         self.metadata.increment()
         self.load_segment()
 
     def transcript(self) -> str:
-        return self._transcript.read_text()
+        return self._transcript
