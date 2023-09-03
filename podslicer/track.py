@@ -10,6 +10,7 @@ METADATA_FILE = "metadata.json"
 class Metadata:
     current: int
     extension: str
+    path: Path
     total: int
 
     @classmethod
@@ -17,7 +18,7 @@ class Metadata:
         file = path / METADATA_FILE
         text = file.read_text()
 
-        return cls(**json.loads(text))
+        return cls(**json.loads(text) | dict(path=path))
 
     def audio(self) -> Path:
         return Path(str(self.current)).with_suffix(self.extension)
@@ -29,7 +30,7 @@ class Metadata:
             raise IndexError("Reached the last segment.")
 
     def json(self) -> str:
-        return json.dumps(vars(self))
+        return json.dumps({k: v for (k, v) in vars(self).items() if k != "path"})
 
     def progress(self) -> float:
         return round(self.current / self.total * 100, ndigits=1)
