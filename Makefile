@@ -1,12 +1,17 @@
-.PHONY: run test watch
+.PHONY: default run test watch
 
 TEST_DIR = ./tests
 
-run:
+default:     # Show all available commands.
+	@echo "Welcome to podslicer!\n"
+	@grep -E '^\w+:' Makefile
+	@echo "\n"
+
+run:         # Run podslicer application.
 	python -m podslicer
 
-test:
+test:        # Run tests.
 	pytest $(TEST_DIR)
 
-watch:
+watch:       # Run and watch tests.
 	ptw -- -vv $(TEST_DIR)
