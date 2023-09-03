@@ -1,13 +1,14 @@
+import json
 from pathlib import Path
 
 import pytest
 
-from podslicer.track import Metadata
+from podslicer.track import METADATA_FILE, Metadata
 
 
 @pytest.fixture()
-def metadata(tmp_path: Path) -> Metadata:
-    return Metadata(current=0, extension=".m4a", path=tmp_path, total=1)
+def metadata(track_path: Path) -> Metadata:
+    return Metadata(current=0, extension=".m4a", path=track_path, total=1)
 
 
 def test_metadata_can_be_json_encoded(metadata: Metadata, metadata_json: str) -> None:
@@ -25,23 +26,23 @@ def test_metadata_can_be_json_encoded(metadata: Metadata, metadata_json: str) ->
     ],
 )
 def test_metadata_can_report_progress(
-    current: int, total: int, expected: int, tmp_path: Path
+    current: int, total: int, expected: int, track_path: Path
 ) -> None:
-    metadata = Metadata(current=current, extension=".m4a", path=tmp_path, total=total)
+    metadata = Metadata(current=current, extension=".m4a", path=track_path, total=total)
 
     assert metadata.progress() == expected
 
 
 def test_metadata_should_return_audio_filepath(
-    metadata: Metadata, tmp_path: Path
+    metadata: Metadata, track_path: Path
 ) -> None:
-    assert metadata.audio() == tmp_path / "0.m4a"
+    assert metadata.audio() == track_path / "0.m4a"
 
 
 def test_metadata_should_return_transcript_filepath(
-    metadata: Metadata, tmp_path: Path
+    metadata: Metadata, track_path: Path
 ) -> None:
-    assert metadata.transcript() == tmp_path / "0.txt"
+    assert metadata.transcript() == track_path / "0.txt"
 
 
 def test_increment_should_increase_current_index(metadata: Metadata) -> None:
@@ -55,3 +56,16 @@ def test_increment_should_increase_current_index(metadata: Metadata) -> None:
         metadata.increment()
 
     assert metadata.current == 1
+
+
+def test_increment_should_encode_and_save_progress(metadata: Metadata) -> None:
+    path_to_json = metadata.path / METADATA_FILE
+
+    assert path_to_json.is_file()
+
+    first = path_to_json.read_text()
+    metadata.increment()
+    saved = path_to_json.read_text()
+
+    assert json.loads(first)["current"] == 0
+    assert json.loads(saved)["current"] == 1

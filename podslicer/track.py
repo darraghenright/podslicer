@@ -15,43 +15,86 @@ class Metadata:
 
     @classmethod
     def from_path(cls: type[Self], path: Path) -> Self:
+        """
+        Build an instance of metadata from JSON
+        encoded metadata state read from disc.
+        """
         file = path / METADATA_FILE
         text = file.read_text()
 
         return cls(**json.loads(text) | dict(path=path))
 
     def audio(self) -> Path:
+        """
+        Return the audio filepath.
+        """
         return (self.path / str(self.current)).with_suffix(self.extension)
 
     def increment(self) -> None:
+        """
+        Increment the current index and save metadata
+        state. Raises an `IndexError` if the current
+        index exceeds the total number of segments.
+        """
         if self.current < self.total:
             self.current += 1
         else:
             raise IndexError("Reached the last segment.")
 
+        self.save()
+
     def json(self) -> str:
+        """
+        JSON encode required subset of metadata state.
+        """
         return json.dumps({k: v for (k, v) in vars(self).items() if k != "path"})
 
     def progress(self) -> float:
+        """
+        Return current progress as a percentage.
+        """
         return round(self.current / self.total * 100, ndigits=1)
 
+    def save(self) -> None:
+        """
+        Save JSON encoded metadata to the metadata file.
+        """
+        (self.path / METADATA_FILE).write_text(self.json())
+
     def transcript(self) -> Path:
+        """
+        Return the transcript filepath.
+        """
         return (self.path / str(self.current)).with_suffix(".txt")
 
 
 class Track:
     def __init__(self, path: Path) -> None:
+        """
+        Create an instance of `Track`.
+        """
         self.metadata = Metadata.from_path(path)
         self.load_segment()
 
     def load_segment(self) -> None:
+        """
+        Load the current segment.
+        """
         self._audio = self.metadata.audio()
         self._transcript = self.metadata.transcript().read_text()
         self._audio.stat()
 
     def next_segment(self) -> None:
+        """
+        Attempt to load the next segment.
+        An `IndexError` is raised if the
+        current index exceeds the total.
+        """
         self.metadata.increment()
         self.load_segment()
 
     def transcript(self) -> str:
+        """
+        Return the transcript text.
+        """
         return self._transcript
