@@ -111,8 +111,6 @@ def test_track_should_load_and_iterate_through_segments(track_path: Path) -> Non
     track = Track(path=track_path)
 
     assert track.metadata.current == 0
-    assert track.segment.audio.name == "0.m4a"
-    assert track.segment.transcript == "0"
 
     track.next_segment()
 

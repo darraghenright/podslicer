@@ -43,7 +43,7 @@ def test_metadata_can_return_transcript_filename() -> None:
     assert metadata.transcript() == Path("0.txt")
 
 
-def test_metadata_can_increment_progress() -> None:
+def test_increment_should_increase_current_index() -> None:
     metadata = Metadata(current=0, extension=".m4a", total=1)
 
     assert metadata.current == 0
@@ -56,4 +56,3 @@ def test_metadata_can_increment_progress() -> None:
         metadata.increment()
 
     assert metadata.current == 1
-
