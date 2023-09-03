@@ -3,6 +3,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Self
 
+from podslicer.audio import Audio
+
 METADATA_FILE = "metadata.json"
 
 
@@ -26,7 +28,7 @@ class Metadata:
 
     def audio(self) -> Path:
         """
-        Return the audio filepath.
+        Return the path to the audio file.
         """
         return (self.path / str(self.current)).with_suffix(self.extension)
 
@@ -63,7 +65,7 @@ class Metadata:
 
     def transcript(self) -> Path:
         """
-        Return the transcript filepath.
+        Return the path to the transcript file.
         """
         return (self.path / str(self.current)).with_suffix(".txt")
 
@@ -80,9 +82,8 @@ class Track:
         """
         Load the current segment.
         """
-        self._audio = self.metadata.audio()
+        self._audio = Audio(self.metadata.audio())
         self._transcript = self.metadata.transcript().read_text()
-        self._audio.stat()
 
     def next_segment(self) -> None:
         """
@@ -92,6 +93,9 @@ class Track:
         """
         self.metadata.increment()
         self.load_segment()
+
+    def playback(self) -> None:
+        self._audio.playback()
 
     def transcript(self) -> str:
         """

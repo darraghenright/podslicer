@@ -33,13 +33,13 @@ def test_metadata_can_report_progress(
     assert metadata.progress() == expected
 
 
-def test_metadata_should_return_audio_filepath(
+def test_metadata_should_return_path_to_audio_file(
     metadata: Metadata, track_path: Path
 ) -> None:
     assert metadata.audio() == track_path / "0.m4a"
 
 
-def test_metadata_should_return_transcript_filepath(
+def test_metadata_should_return_path_to_transcript_file(
     metadata: Metadata, track_path: Path
 ) -> None:
     assert metadata.transcript() == track_path / "0.txt"

@@ -8,8 +8,9 @@ A simple command-line application to slice up audio based podcasts into segments
 
 ## Prerequisites
 
-- Python version 3.11 or above.
+- Python (version 3.11 or above).
 - Poetry.
+- Uses [`afinfo`](https://ss64.com/osx/afinfo.html) and [`afplay`](https://ss64.com/osx/afplay.html) so MacOS only for now.
 
 ## Up and running
 
