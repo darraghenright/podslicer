@@ -1,1 +1,4 @@
 __pycache__
+tracks/*
+!tracks/.gitkeep
+__bin
