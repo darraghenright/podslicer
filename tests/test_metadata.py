@@ -45,7 +45,7 @@ def test_metadata_should_return_path_to_transcript_file(
     assert metadata.transcript() == track_path / "0.txt"
 
 
-def test_increment_should_increase_current_index(metadata: Metadata) -> None:
+def test_metadata_should_move_current_index(metadata: Metadata) -> None:
     assert metadata.current == 0
 
     metadata.increment()
@@ -55,6 +55,14 @@ def test_increment_should_increase_current_index(metadata: Metadata) -> None:
     metadata.increment()
 
     assert metadata.current == 1
+
+    metadata.decrement()
+
+    assert metadata.current == 0
+
+    metadata.decrement()
+
+    assert metadata.current == 0
 
 
 def test_increment_should_encode_and_save_progress(metadata: Metadata) -> None:

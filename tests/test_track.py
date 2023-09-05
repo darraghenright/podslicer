@@ -101,27 +101,33 @@ def test_track_requires_segment_transcript_file(track_path: Path) -> None:
     e.match(f"No such file or directory: '{track_path}/0.txt'")
 
 
-def test_track_should_load_and_iterate_through_segments(track_path: Path) -> None:
+def test_track_should_load_segments(track_path: Path) -> None:
     """
     Expect that an instance of `Track` loads the segment
     at the current index, and expect that a track can
-    iterate through segments up to and including the
-    total, but not beyond it.
+    increment through segments up to and including the
+    total, but not beyond it, and back to the start.
     """
     track = Track(path=track_path)
 
     assert track.metadata.current == 0
-    assert track.metadata.current < track.metadata.total
+    assert track.metadata.total == 1
 
     track.next_segment()
 
-    assert track.metadata.current == 1
     assert track.metadata.current == track.metadata.total
 
     track.next_segment()
 
-    assert track.metadata.current == 1
     assert track.metadata.current == track.metadata.total
+
+    track.previous_segment()
+
+    assert track.metadata.current == 0
+
+    track.previous_segment()
+
+    assert track.metadata.current == 0
 
 
 def test_track_transcript_should_be_available(track_path: Path) -> None:

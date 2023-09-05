@@ -34,12 +34,18 @@ class Metadata:
 
     def increment(self) -> None:
         """
-        Increment the current index and save metadata
-        state. Raises an `IndexError` if the current
-        index exceeds the total number of segments.
+        Increment the current index and save metadata.
         """
         if self.current < self.total:
             self.current += 1
+            self.save()
+
+    def decrement(self) -> None:
+        """
+        Decrement the current index and save metadata.
+        """
+        if self.current > 0:
+            self.current -= 1
             self.save()
 
     def json(self) -> str:
@@ -93,6 +99,10 @@ class Track:
 
     def playback(self) -> None:
         self._audio.playback()
+
+    def previous_segment(self) -> None:
+        self.metadata.decrement()
+        self.load_segment()
 
     def transcript(self) -> str:
         """
