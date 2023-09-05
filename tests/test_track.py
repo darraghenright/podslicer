@@ -106,22 +106,22 @@ def test_track_should_load_and_iterate_through_segments(track_path: Path) -> Non
     Expect that an instance of `Track` loads the segment
     at the current index, and expect that a track can
     iterate through segments up to and including the
-    total, byt not beyond it.
+    total, but not beyond it.
     """
     track = Track(path=track_path)
 
     assert track.metadata.current == 0
+    assert track.metadata.current < track.metadata.total
 
     track.next_segment()
 
     assert track.metadata.current == 1
+    assert track.metadata.current == track.metadata.total
 
-    with pytest.raises(IndexError) as e:
-        track.next_segment()
-
-    e.match("Reached the last segment.")
+    track.next_segment()
 
     assert track.metadata.current == 1
+    assert track.metadata.current == track.metadata.total
 
 
 def test_track_transcript_should_be_available(track_path: Path) -> None:

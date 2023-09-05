@@ -40,10 +40,7 @@ class Metadata:
         """
         if self.current < self.total:
             self.current += 1
-        else:
-            raise IndexError("Reached the last segment.")
-
-        self.save()
+            self.save()
 
     def json(self) -> str:
         """

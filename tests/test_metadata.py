@@ -52,8 +52,7 @@ def test_increment_should_increase_current_index(metadata: Metadata) -> None:
 
     assert metadata.current == 1
 
-    with pytest.raises(IndexError):
-        metadata.increment()
+    metadata.increment()
 
     assert metadata.current == 1
 
