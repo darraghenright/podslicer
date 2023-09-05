@@ -1,7 +1,29 @@
 from html.parser import HTMLParser
 from typing import Optional, Self, Union
 
+from urwid import TOP, Divider, Filler, Frame, Pile, Text  # type: ignore
+
 ParsedRow = Union[str, tuple[str, str]]
+
+
+HEADER_ROWS = [
+    "<header>podslicer 🔪✨</header>",
+    "",
+    "<white>[a]</white> play (or stop) segment audio",
+    "<white>[s]</white> toggle segment transcript",
+    "<white>[←]</white> previous segment",
+    "<white>[→]</white> next segment",
+    "<white>[q]</white> quit",
+]
+
+TEXT_STYLES = [
+    ("header", "bold,white", ""),
+    ("white", "white", ""),
+]
+
+
+class Display:
+    ...
 
 
 class Row(HTMLParser):

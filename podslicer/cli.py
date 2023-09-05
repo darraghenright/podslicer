@@ -1,41 +1,19 @@
 from pathlib import Path
-from typing import Any, NoReturn
 
 import urwid as u  # type: ignore
-from urwid import Divider, Filler, Frame, MainLoop, Pile, Text  # type: ignore
 
-from podslicer.display import Row
-
-HEADER_ROWS = [
-    "<header>podslicer 🔪✨</header>",
-    "",
-    "<white>[a]</white> play (or stop) segment audio",
-    "<white>[s]</white> show (or hide) segment transcript",
-    "<white>[d]</white> next segment",
-    "<white>[q]</white> quit",
-]
-
-TEXT_STYLES = [
-    ("header", "bold,white", ""),
-    ("white", "white", ""),
-]
-
-
-def input_handler(key_or_event: Any) -> NoReturn:
-    raise u.ExitMainLoop()
+from podslicer.control import InputController, InputHandler
+from podslicer.display import HEADER_ROWS, TEXT_STYLES, Display
+from podslicer.track import Track
 
 
 def run(track_path: Path) -> None:
     if not track_path.is_dir():
         raise NotADirectoryError(f"Path to track cannot be found: {track_path}")
 
-    header = Pile([Text(Row.parse(row)) for row in HEADER_ROWS])
+    display = Display(HEADER_ROWS)
+    track = Track(track_path)
+    input_handler = InputHandler(InputController(display, track))
+    loop = u.MainLoop(display.layout(), TEXT_STYLES, unhandled_input=input_handler)
 
-    hint = Text("This is where a transcript would go.")
-    progress = Text("0% complete (0 of 100)")
-    body = Filler(Pile([Divider(), progress, Divider(), hint]), u.TOP)
-
-    frame = Frame(body, header=header)
-
-    loop = MainLoop(frame, TEXT_STYLES, unhandled_input=input_handler)
     loop.run()

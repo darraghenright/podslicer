@@ -1,6 +1,7 @@
 from unittest.mock import MagicMock
 
 import pytest
+from urwid import ExitMainLoop  # type: ignore
 
 from podslicer.control import InputHandler
 
@@ -46,6 +47,14 @@ def test_input_handler_should_handle_forward_input() -> None:
 
     input_handler("right")
     controller_mock.forward.assert_called_once()  # type: ignore
+
+
+def test_input_handler_should_handle_quit() -> None:
+    input_handler = InputHandler(MagicMock())
+
+    for key in ("q", "Q"):
+        with pytest.raises(ExitMainLoop):
+            input_handler(key)
 
 
 def test_input_handler_should_silently_ignore_other_inputs() -> None:
