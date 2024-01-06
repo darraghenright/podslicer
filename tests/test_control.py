@@ -3,7 +3,7 @@ from unittest.mock import MagicMock
 import pytest
 from urwid import ExitMainLoop  # type: ignore
 
-from podslicer.control import InputHandler
+from podslicer.control import InputController, InputHandler
 
 
 def test_input_handler_requires_controller() -> None:
@@ -62,3 +62,26 @@ def test_input_handler_should_silently_ignore_other_inputs() -> None:
     input_handler("XYZ")
     input_handler([])
     input_handler(None)
+
+
+def test_input_controller_requires_display_and_track() -> None:
+    with pytest.raises(TypeError) as e:
+        InputController()  # type: ignore
+
+    e.match("missing 2 required positional arguments: 'display' and 'track'")
+
+
+def test_input_controller_should_back() -> None:
+    ...
+
+
+def test_input_controller_should_forward() -> None:
+    ...
+
+
+def test_input_controller_should_playback() -> None:
+    ...
+
+
+def test_input_controller_should_transcript() -> None:
+    ...

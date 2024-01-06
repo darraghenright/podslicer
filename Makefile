@@ -8,7 +8,7 @@ default:     # Show all available commands.
 	@echo "\n"
 
 run:         # Run podslicer application.
-	python -m podslicer
+	python -m podslicer tracks/0
 
 test:        # Run tests.
 	pytest $(TEST_DIR)

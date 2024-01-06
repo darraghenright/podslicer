@@ -13,14 +13,26 @@ class InputController:
 
     def back(self) -> None:
         self.track.previous_segment()
+        progress = self.track.metadata.progress()
+        current = self.track.metadata.current
+        total = self.track.metadata.total
+        self.display.hide_hint()
+        self.display.update_progress(progress, current, total)
+
     def forward(self) -> None:
         self.track.next_segment()
+        self.display.hide_hint()
+        progress = self.track.metadata.progress()
+        current = self.track.metadata.current
+        total = self.track.metadata.total
+        self.display.update_progress(progress, current, total)
 
     def playback(self) -> None:
         self.track.playback()
 
     def transcript(self) -> None:
         pass
+        self.display.toggle_hint(self.track.transcript())
 
 
 class InputHandler:

@@ -1,6 +1,6 @@
 import pytest
 
-from podslicer.display import ParsedRow, Row
+from podslicer.display import Display, ParsedRow, Row
 
 ROW_FIXTURES = [
     pytest.param(
@@ -48,3 +48,17 @@ def test_nested_tags_should_raise_an_exception() -> None:
         Row.parse(row)
 
     e.match("Nested tags are not allowed.")
+
+
+def test_display() -> None:
+    Display()
+
+
+def test_hide_hint() -> None:
+    ...
+
+
+# self.display.hide_hint()
+# self.display.show_hint()
+# self.display.update_progress(1, 100)
+# self.display.toggle_hint(self.track.transcript())

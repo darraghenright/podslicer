@@ -1,5 +1,6 @@
 import json
 from dataclasses import dataclass
+from math import floor
 from pathlib import Path
 from typing import Self
 
@@ -58,7 +59,7 @@ class Metadata:
         """
         Return current progress as a percentage.
         """
-        return round(self.current / self.total * 100, ndigits=1)
+        return floor(self.current / self.total * 100)
 
     def save(self) -> None:
         """
